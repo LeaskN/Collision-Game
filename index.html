@@ -12,56 +12,33 @@
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="container-fluid">
+<body class="container">
 
-
-
+  <div class="row">
+    <div class="col-xs-12 col-md-8 offset-md-2 col-lg-8 offset-lg-2 no-padding">
+      <nav class="navbar navbar-light" style="background-color: #e3f2fd;">Pick Your Theme!
+        <form class="form-inline">
+          <button id="Pokemon" type="button" class="btn btn-danger">Pokémon</button>
+          <button id="Zombies" type="button" class="btn btn-warning">Zombies</button>
+          <button id="Megaman" type="button" class="btn btn-dark">Megaman</button>
+          <button id="Peach" type="button" class="btn btn-light">Peach</button>
+        </form>
+      </nav>
     </div>
-    <div class="row">
-      <div class="col-xs-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2">
-        <div class="card" style="width: 18rem;">
-          <img class="card-img-top" src="..." alt="Card Image Goes Here">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Text.</p>
-            <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
-            <button id="Pokemon" type="button" class="btn btn-danger">Pokémon</button>
-            <button id="Zombies" type="button" class="btn btn-warning">Zombies</button>
-            <button id="Corporate" type="button" class="btn btn-dark">Corporate</button>
-          </div>
-        </div>
-        <canvas class="container" id="canvas" width="960" height="720" style="border:0px solid #000000;"></canvas>
+  </div>
+
+<div style="font-family: 'Press Start 2P', cursive;">.</div>
+    </div>
+      <div class="col-xs-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3 ">
+        <!-- <h5 class="card-title">Pick your Theme!</h5> -->
+        <!-- <button id="Pokemon" type="button" class="btn btn-danger">Pokémon</button>
+        <button id="Zombies" type="button" class="btn btn-warning">Zombies</button>
+        <button id="Megaman" type="button" class="btn btn-dark">Megaman</button> -->
       </div>
+    <div class="row">
+        <canvas class="col-xs-12 col-md-8 offset-md-2 col-lg-8 offset-lg-2 no-padding" id="canvas" width="960" height="720" style="border:0px solid red;"></canvas>
     </div>
     <script src="script.js"></script>
 </body>
-
-<!-- <body class="container-fluid">
-
-  <div class="card" style="width: 18rem;">
-  <img class="card-img-top" src="..." alt="Card Image Goes Here">
-  <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">Text.</p>
-    <button id="Pokemon" type="button" class="btn btn-danger">Pokémon</button>
-    <button id="Zombies" type="button" class="btn btn-warning">Zombies</button>
-    <button id="Corporate" type="button" class="btn btn-dark">Corporate</button>
-  </div>
-</div>
-
-  <div class="buttons">
-    <button id="Pokemon" type="button" class="btn btn-danger">Pokémon</button>
-    <button id="Zombies" type="button" class="btn btn-warning">Zombies</button>
-    <button id="Corporate" type="button" class="btn btn-dark">Corporate</button>
-  </div>
-
-    </div>
-    <div class="row">
-      <div class="col-xs-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2">
-        <canvas class="container" id="canvas" width="960" height="720" style="border:0px solid #000000;"></canvas>
-      </div>
-    </div>
-    <script src="scriptTest.js"></script>
-</body> -->
 
 </html>

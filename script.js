@@ -1,44 +1,78 @@
 var canvas = document.getElementById("canvas").getContext("2d");
 var Zombies = document.getElementById("Zombies");
 var Pokemon = document.getElementById("Pokemon");
-var Corporate = document.getElementById("Corporate");
+var Megaman = document.getElementById("Megaman");
+var Peach = document.getElementById("Peach");
 localStorage.setItem("Username", "Red");
-var begin = null;
-// button.addEventListener('click', function(){
-//   if(begin === null){
-//     startNewGame();
-//   } else {
-//     paused = true;
-//   }
-// })
+canvas.font = 'Bold 30px Geneva';
+// canvas.font = "'Press Start 2P', cursive";
 
-// canvas.style.display="none";
-canvas.font = '30px Arial';
-canvas.mozImageSmoothingEnabled = false;	//better graphics for pixel art
-canvas.msImageSmoothingEnabled = false;
-canvas.imageSmoothingEnabled = false;
 
 var TILE_SIZE = 32;
 var WIDTH = 960;
 var HEIGHT = 720;
-var timeWhenGameStarted = Date.now();	//return time in ms
-
+var timeWhenGameStarted = Date.now();
 var frameCount = 0;
-
 var score = 0;
-
-var paused = false;
+var paused = true;
 var lost = false;
+
+Pokemon.addEventListener('click', function(){
+  paused = false;
+  document.body.style.backgroundImage = "url('https://cdn.bulbagarden.net/upload/thumb/6/63/Pokk%C3%A9n_Pikachu_Libre.png/220px-Pokk%C3%A9n_Pikachu_Libre.png')";
+  document.body.style.backgroundSize = "contains";
+  Img.player.src = "http://24.media.tumblr.com/22a09e751c29806f1d775438aafaa495/tumblr_mzqgw7X6Go1sycp1mo1_500.gif";
+  Img.enemy = new Image();
+  Img.enemy.src = "http://www.pngmart.com/files/2/Pokeball-PNG-Pic.png";
+  Img.bullet.src = '';
+  Img.upgrade1 = new Image();
+  Img.upgrade1.src = "https://pre00.deviantart.net/5c6b/th/pre/i/2017/189/b/a/rare_candy_png_by_chipflake-dbfisv8.png";
+    startNewGame();
+})
+Zombies.addEventListener('click', function(){
+  paused = false;
+  document.body.style.backgroundImage = "url('https://ak2.picdn.net/shutterstock/videos/20122762/thumb/1.jpg?i10c=img.resize(height:160)')";
+  document.body.style.backgroundSize = "cover";
+  Img.player.src = "http://1.bp.blogspot.com/-IXCY3D9Xus4/VkW2NMDc12I/AAAAAAAABZI/j2t-WJPzDFQ/s1600/Idle.gif";
+  Img.enemy = new Image();
+  Img.enemy.src = "http://laoblogger.com/images/plant-vs-zombies-clipart-8.jpg";
+  Img.bullet.src = '';
+  Img.upgrade1 = new Image();
+  Img.upgrade1.src = "https://i.pinimg.com/originals/e9/9e/b7/e99eb7342bd6c635614854225ba4aa3e.png";
+    startNewGame();
+})
+Megaman.addEventListener('click', function(){
+  paused = false;
+  document.body.style.backgroundImage = "url('https://wallpapercave.com/wp/rQW6Ey5.jpg')";
+  document.body.style.backgroundSize = "cover";
+  Img.player.src = "http://pixelartmaker.com/art/34652460ad15646.png";
+  Img.enemy = new Image();
+  Img.enemy.src = "https://cdn.wikimg.net/en/strategywiki/images/c/ca/Mega_Man_2_enemy_Kaminari_Goro.png";
+  Img.bullet.src = '';
+  Img.upgrade1 = new Image();
+  Img.upgrade1.src = "http://www.pngmart.com/files/1/Pepperoni-Pizza.png";
+    startNewGame();
+})
+Peach.addEventListener('click', function(){
+  paused = false;
+  document.body.style.backgroundImage = "url('https://orig00.deviantart.net/daa0/f/2014/282/b/e/nintendo__princess_peach_wallpaper_by_mikedarko-d825kzj.png')";
+  document.body.style.backgroundSize = "cover";
+  Img.player.src = "http://pixelartmaker.com/art/17acc2a42108965.png";
+  Img.enemy = new Image();
+  Img.enemy.src = "https://vignette.wikia.nocookie.net/fantendo/images/0/0d/16_bit_mario_by_nathanmarino-d4ntfl6.png/revision/latest?cb=20160427210650";
+  Img.bullet.src = '';
+  Img.upgrade1 = new Image();
+  Img.upgrade1.src = "https://pre00.deviantart.net/edc1/th/pre/i/2012/027/a/7/8_bit_1up_mushroom_by_nathanmarino-d4nt2xp.png";
+    startNewGame();
+})
+
 
 var Img = {};
 Img.player = new Image();
-Img.player.src = "media/squirtle.png";
-Img.zombie = new Image();
-Img.zombie.src = "media/8bitzombie.png";
+Img.player.src = "http://1.bp.blogspot.com/-IXCY3D9Xus4/VkW2NMDc12I/AAAAAAAABZI/j2t-WJPzDFQ/s1600/Idle.gif";
+Img.enemy = new Image();
 Img.bullet = new Image();
-Img.bullet.src = '';
 Img.upgrade1 = new Image();
-Img.upgrade1.src = "media/orange.png";
 
 Entity = function(type,id,x,y,width,height,img){
 	var self = {
@@ -176,8 +210,6 @@ Actor = function(type,id,x,y,width,height,img,hp){
 		var frameHeight = self.img.height/2;
 
 		var aimAngle = self.aimAngle;
-		if(aimAngle < 0)
-			aimAngle = 360 + aimAngle;
 
 		var directionMod = 3;	//draw right
 		if(aimAngle >= 45 && aimAngle < 135)	//down
@@ -269,11 +301,27 @@ Enemy.randomlyGenerate = function(){
 	//Math.random() returns a number between 0 and 1
 	var x = Math.random()*Maps.current.width;
 	var y = Math.random()*Maps.current.height;
-	var height = 32;
-	var width = 32;
-	var id = Math.random();
-	Enemy(id,x,y,width,height,Img.zombie,2,1);
-
+  if (Img.enemy.src === "http://www.pngmart.com/files/2/Pokeball-PNG-Pic.png"){
+    var height = 28;
+    var width = 28;
+    var id = Math.random();
+    Enemy(id,x,y,width,height,Img.enemy,2,1);
+  } else if (Img.enemy.src === "http://laoblogger.com/images/plant-vs-zombies-clipart-8.jpg"){
+    var height = 50;
+    var width = 50;
+    var id = Math.random();
+    Enemy(id,x,y,width,height,Img.enemy,2,1)
+  } else if (Img.enemy.src === "http://laoblogger.com/images/plant-vs-zombies-clipart-8.jpg"){
+    var height = 50;
+    var width = 50;
+    var id = Math.random();
+    Enemy(id,x,y,width,height,Img.enemy,2,1)
+  } else {
+    var height = 50;
+    var width = 50;
+    var id = Math.random();
+    Enemy(id,x,y,width,height,Img.enemy,2,1)
+  }
 }
 
 //Upgrade char's to be added to the object below
@@ -377,7 +425,6 @@ document.onkeyup = function(event){
 
 update = function(){
   if(lost){
-    console.log(score)
       if(score > localStorage.getItem("Score") || localStorage.getItem("Score") === null) {
         localStorage.setItem("Score", score);
         alert(score + '\n'+ "HIGHSCORE!")
@@ -388,7 +435,8 @@ update = function(){
     return;
   }
 	if(paused){
-		canvas.fillText('Paused',WIDTH/2.3,HEIGHT/2);
+		canvas.fillText('Press P to Resume',WIDTH/2.8,HEIGHT/2);
+    canvas.fillText('Paused',WIDTH/2.3,HEIGHT/5);
 		return;
 	}
 
@@ -409,10 +457,10 @@ update = function(){
 
 	canvas.fillText(player.hp + " Hp",0,30);
 	canvas.fillText('Score: ' + score,200,30);
-  // canvas.fillText('Location: ' +'x:'+ player.x/32 + ' y: ' + player.y/32,400,30);
 }
 
 startNewGame = function(){
+  paused = false;
 	player.hp = 100;
 	timeWhenGameStarted = Date.now();
 	frameCount = 0;
@@ -469,7 +517,7 @@ var array = [
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,
 0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,
@@ -500,13 +548,13 @@ var array = [
 0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,
 0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,1,1,1,1,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,1,1,1,1,1,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,
 0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,1,1,1,1,0,0,0,1,1,1,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,1,1,1,1,0,0,0,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,1,1,1,1,0,0,0,1,1,1,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,
+0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,1,1,1,1,0,0,0,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
 1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,0,0,0,0,0,
@@ -557,6 +605,7 @@ for(var i = 0 ; i < 120; i++){
 	}
 }
 
+// Maps.current = Maps('field',"https://github.com/LeaskN/LeaskN.github.io/blob/master/media/galvanize300.png?raw=true", 3837, 2850, array2D);
 Maps.current = Maps('field',"media/galvanize300.png", 3837, 2850, array2D);
 
 
