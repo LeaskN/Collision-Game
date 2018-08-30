@@ -1,24 +1,22 @@
 @import url('https://fonts.googleapis.com/css?family=Press+Start+2P');
 
 body{
-  /* font-family: Helvetica; */
   font-family: 'Press Start 2P', cursive;
-  background-image: ;
   background-color: grey;
-  height: 100%;
+  height: 100vh;
 }
 #canvas {
-    background-color: silver;
-    background-image: linear-gradient(335deg, #b00 23px, transparent 23px),
-    linear-gradient(155deg, #d00 23px, transparent 23px),
-    linear-gradient(335deg, #b00 23px, transparent 23px),
-    linear-gradient(155deg, #d00 23px, transparent 23px);
-    background-size: 58px 58px;
+    background-color: rgb(0, 0, 0);
+    background-image: linear-gradient(335deg, rgb(68, 15, 15) 23px, transparent 23px),
+    linear-gradient(155deg, rgb(68, 15, 15) 23px, transparent 23px),
+    linear-gradient(335deg, rgb(102, 3, 3) 23px, transparent 23px),
+    linear-gradient(155deg, rgb(68, 15, 15) 23px, transparent 23px);
+    background-size: 58px 58px;	
     background-position: 0px 2px, 4px 35px, 29px 31px, 34px 6px;
     border: 10px solid black !important;
     border-radius: 2%;
-  }
+}
 
- .no-padding {
-   padding: 0 0;
- }
+.no-padding {
+  padding: 0 0;
+}

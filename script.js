@@ -5,20 +5,20 @@ var Megaman = document.getElementById("Megaman");
 var Peach = document.getElementById("Peach");
 localStorage.setItem("Username", "Red");
 canvas.font = 'Bold 30px Geneva';
-// canvas.font = "'Press Start 2P', cursive";
-
-
+canvas.fillStyle = "white";
 var TILE_SIZE = 32;
 var WIDTH = 960;
 var HEIGHT = 720;
 var timeWhenGameStarted = Date.now();
 var frameCount = 0;
 var score = 0;
-var paused = true;
+var paused = false;
+var newGame = true;
 var lost = false;
 
 Pokemon.addEventListener('click', function(){
-  paused = false;
+	paused = false;
+	newGame = false;
   document.body.style.backgroundImage = "url('https://cdn.bulbagarden.net/upload/thumb/6/63/Pokk%C3%A9n_Pikachu_Libre.png/220px-Pokk%C3%A9n_Pikachu_Libre.png')";
   document.body.style.backgroundSize = "contains";
   Img.player.src = "http://24.media.tumblr.com/22a09e751c29806f1d775438aafaa495/tumblr_mzqgw7X6Go1sycp1mo1_500.gif";
@@ -28,9 +28,10 @@ Pokemon.addEventListener('click', function(){
   Img.upgrade1 = new Image();
   Img.upgrade1.src = "https://pre00.deviantart.net/5c6b/th/pre/i/2017/189/b/a/rare_candy_png_by_chipflake-dbfisv8.png";
     startNewGame();
-})
+});
 Zombies.addEventListener('click', function(){
-  paused = false;
+	paused = false;
+	newGame = false;
   document.body.style.backgroundImage = "url('https://ak2.picdn.net/shutterstock/videos/20122762/thumb/1.jpg?i10c=img.resize(height:160)')";
   document.body.style.backgroundSize = "cover";
   Img.player.src = "http://1.bp.blogspot.com/-IXCY3D9Xus4/VkW2NMDc12I/AAAAAAAABZI/j2t-WJPzDFQ/s1600/Idle.gif";
@@ -40,9 +41,10 @@ Zombies.addEventListener('click', function(){
   Img.upgrade1 = new Image();
   Img.upgrade1.src = "https://i.pinimg.com/originals/e9/9e/b7/e99eb7342bd6c635614854225ba4aa3e.png";
     startNewGame();
-})
+});
 Megaman.addEventListener('click', function(){
-  paused = false;
+	paused = false;
+	newGame = false;
   document.body.style.backgroundImage = "url('https://wallpapercave.com/wp/rQW6Ey5.jpg')";
   document.body.style.backgroundSize = "cover";
   Img.player.src = "http://pixelartmaker.com/art/34652460ad15646.png";
@@ -52,9 +54,10 @@ Megaman.addEventListener('click', function(){
   Img.upgrade1 = new Image();
   Img.upgrade1.src = "http://www.pngmart.com/files/1/Pepperoni-Pizza.png";
     startNewGame();
-})
+});
 Peach.addEventListener('click', function(){
-  paused = false;
+	paused = false;
+	newGame = false;
   document.body.style.backgroundImage = "url('https://orig00.deviantart.net/daa0/f/2014/282/b/e/nintendo__princess_peach_wallpaper_by_mikedarko-d825kzj.png')";
   document.body.style.backgroundSize = "cover";
   Img.player.src = "http://pixelartmaker.com/art/17acc2a42108965.png";
@@ -64,7 +67,7 @@ Peach.addEventListener('click', function(){
   Img.upgrade1 = new Image();
   Img.upgrade1.src = "https://pre00.deviantart.net/edc1/th/pre/i/2012/027/a/7/8_bit_1up_mushroom_by_nathanmarino-d4nt2xp.png";
     startNewGame();
-})
+});
 
 
 var Img = {};
@@ -132,8 +135,7 @@ Entity = function(type,id,x,y,width,height,img){
 
 	return self;
 }
-//(type,id,x,y,width,height,img,hp)
-//characteristics
+
 Player = function(){
 	var self = Actor('player','myId',1900,1400,32,32,Img.player,100,1);
 
@@ -365,9 +367,6 @@ Upgrade.randomlyGenerate = function(){
 	Upgrade(id,x,y,width,height,category,img);
 }
 
-//#####
-
-
 testCollisionRectRect = function(rect1,rect2){
 	return rect1.x <= rect2.x+rect2.width
 		&& rect2.x <= rect1.x+rect1.width
@@ -424,6 +423,16 @@ document.onkeyup = function(event){
 
 
 update = function(){
+	if(newGame){
+    canvas.fillText('Welcome!',WIDTH/2.3,HEIGHT/9);
+    canvas.fillText(`To start a new game select a theme from above.`,WIDTH/8,HEIGHT/5);
+		canvas.fillText(`Use the WASD keys or the arrow keys to move,`,WIDTH/7,HEIGHT/4);
+		canvas.fillText(`P to pause and R to restart.`,WIDTH/3.5,HEIGHT/3.4);
+		canvas.fillText(`Your characters health will deplete naturally,`,WIDTH/6,HEIGHT/2.4);
+		canvas.fillText(`So ensure to pick up the bonus items to stay alive!`,WIDTH/7.5,HEIGHT/2.15);
+		canvas.fillText(`Goodluck and have fun!`,WIDTH/3,HEIGHT/1.7);
+		return;
+	}
   if(lost){
       if(score > localStorage.getItem("Score") || localStorage.getItem("Score") === null) {
         localStorage.setItem("Score", score);
@@ -460,7 +469,8 @@ update = function(){
 }
 
 startNewGame = function(){
-  paused = false;
+	// newGame = true;
+  // paused = true;
 	player.hp = 100;
 	timeWhenGameStarted = Date.now();
 	frameCount = 0;
@@ -603,17 +613,10 @@ for(var i = 0 ; i < 120; i++){
 	for(var j = 0 ; j < 120; j++){
 		array2D[i][j] = array[i * 120 + j];
 	}
-}
-
-// Maps.current = Maps('field',"https://github.com/LeaskN/LeaskN.github.io/blob/master/media/galvanize300.png?raw=true", 3837, 2850, array2D);
+};
 Maps.current = Maps('field',"media/galvanize300.png", 3837, 2850, array2D);
-
-
-
 player = Player();
 startNewGame();
-
 setInterval(update,20);
-
-Bullet = function (){}
-Bullet.update = function(){}
+Bullet = function (){};
+Bullet.update = function(){};
